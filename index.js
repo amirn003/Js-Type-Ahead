@@ -15,10 +15,30 @@ function findMatches(wordToMatch, cities) {
   })
 }
 
+function numberWithCommas(x) {
+  x = x.toString();
+  const pattern = /(-?\d+)(\d{3})/;
+  while (pattern.test(x))
+      x = x.replace(pattern, "$1,$2");
+  return x;
+}
+
 function displayMatches() {
   // console.log(this.value);
   const matchArray = findMatches(this.value, cities);
-  console.log(matchArray);
+  const html = matchArray.map(place => {
+    const regex = new RegExp(this.value, 'gi');
+    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`)
+    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`)
+    return `
+      <li>
+        <span class="name">${cityName}, ${stateName} </span>
+        <span class="population"><b>${numberWithCommas(place.population)} </b></span>
+      </li>
+    `;
+  }).join('');
+  suggestions.innerHTML = html;
+  console.log(html);
 }
 
 const searchValue = document.querySelector('.search');
