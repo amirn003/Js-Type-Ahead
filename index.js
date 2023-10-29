@@ -7,3 +7,22 @@ const prom = fetch(endpoint)
   .then(data => cities.push(...data))
 
 console.log(cities)
+
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => {
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.city.match(regex) || place.state.match(regex);
+  })
+}
+
+function displayMatches() {
+  // console.log(this.value);
+  const matchArray = findMatches(this.value, cities);
+  console.log(matchArray);
+}
+
+const searchValue = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchValue.addEventListener('change', displayMatches);
+searchValue.addEventListener('keyup', displayMatches);
